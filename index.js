@@ -1,17 +1,19 @@
-import {products} from './db/product.js'
-import { findProductInCart } from './utils/findProductInCart.js'
-import { createProductCard } from './createProductCard.js'
-const mainContainer = document.getElementById("main")
-let cart = JSON.parse(localStorage.getItem("cart")) || []
-let isProductInCart;
+import { products } from "./db/product.js";
+import { findProductInCart } from "./utils/findProductInCart.js";
+import { findProductInWishList } from "./utils/findProductInWishList.js";
+import { createProductCard } from "./createProductCard.js";
+const mainContainer = document.getElementById("main");
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+let isProductInCart, isProductInWishlist;
 // for (let product of products) {
 //     //Get Main container by Id
-    
+
 //     //Create card Container
 //     const cardContainer = document.createElement("div")
 //     cardContainer.classList.add("card", "card-vertical", "d-flex", "direction-column", "relative", "shadow")
 
-//     //Create card image container 
+//     //Create card image container
 //     const cardImgContainer = document.createElement("div")
 //     cardImgContainer.classList.add("card-image-container")
 
@@ -45,11 +47,11 @@ let isProductInCart;
 //     newPrice.innerText=`${product.newPrice}`
 //     newPrice.classList.add("card-price")
 
-//     //Create old Price 
+//     //Create old Price
 //     const oldPrice = document.createElement("span")
 //     oldPrice.classList.add("price-strike-through")
 //     oldPrice.innerText=` Rs. ${product.oldPrice}`
-    
+
 //     //Create discount
 //     const discountAmt = document.createElement("span")
 //     discountAmt.classList.add("discount")
@@ -76,7 +78,7 @@ let isProductInCart;
 //     cardDescriptionContainer.appendChild(newPrice)
 //     cardDescriptionContainer.appendChild(ratings)
 
-//     //Create Card Button Container 
+//     //Create Card Button Container
 //     const btnContainer = document.createElement("div")
 //     btnContainer.classList.add("cta-btn")
 
@@ -98,20 +100,57 @@ let isProductInCart;
 //     cardContainer.appendChild(cardDetailsContainer)
 //     mainContainer.appendChild(cardContainer)
 
-    
 // }
-mainContainer.addEventListener("click",(event)=>{
-    isProductInCart=findProductInCart(cart,event.target.dataset.id)
-    if(!isProductInCart){
-        const addProductToCart = products.filter(({_id})=> _id == event.target.dataset.id)
-        cart=[...cart,...addProductToCart]
-        localStorage.setItem("cart",JSON.stringify(cart))
-        const cardBtn = event.target
-        cardBtn.innerHTML = `Go To Cart <span class="material-icons-outlined">shopping_cart</span>`
-    }else{
-        location.href = './cart.html'
-    }
-    
-})
+mainContainer.addEventListener("click", (event) => {
+  isProductInCart = findProductInCart(cart, event.target.dataset.id);
+  const isCartBtnClicked = event.target.dataset.id !== undefined;
+  isProductInWishlist = findProductInWishList(
+    wishlist,
+    event.target.dataset.love
+  );
+  const isWishlistBtnClicked = event.target.dataset.love != undefined;
+  if (!isProductInCart && isCartBtnClicked) {
+    const addProductToCart = products.filter(
+      ({ _id }) => _id == event.target.dataset.id
+    );
+    cart = [...cart, ...addProductToCart];
+    localStorage.setItem("cart", JSON.stringify(cart));
+    const cardBtn = event.target;
+    cardBtn.innerHTML = `Go To Cart <span class="material-symbols-outlined">shopping_cart</span>`;
+  } else if (isProductInCart && isCartBtnClicked) {
+    location.href = "./cart.html";
+  } else if (!isProductInWishlist && isWishlistBtnClicked) {
+    const addProductToWishlist = products.filter(
+      ({ _id }) => _id == event.target.dataset.love
+    );
+    wishlist = [...wishlist, ...addProductToWishlist];
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    mainContainer.innerHTML = "";
+    createProductCard(
+      products,
+      mainContainer,
+      findProductInCart,
+      findProductInWishList,
+      "products"
+    );
+  } else if(isProductInWishlist && isWishlistBtnClicked){
+    wishlist=wishlist.filter(({_id})=> _id != event.target.dataset.love)
+    localStorage.setItem("wishlist",JSON.stringify(wishlist))
+    mainContainer.innerHTML=""
+    createProductCard(
+      products,
+      mainContainer,
+      findProductInCart,
+      findProductInWishList,
+      "products"
+    );
+  }
+});
 
-createProductCard(products,mainContainer,findProductInCart,"products")
+createProductCard(
+  products,
+  mainContainer,
+  findProductInCart,
+  findProductInWishList,
+  "products"
+);
