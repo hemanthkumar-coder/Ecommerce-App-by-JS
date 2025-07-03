@@ -58,7 +58,37 @@
         </ul>
       </nav>
     </header>
-    <div id="cart" class="product-container d-flex gap wrap"></div>
+    <main class="d-flex direction-column gap main-main">
+      <h1>Your Cart</h1>
+      <main class="main d-flex space-between gap">
+        <div
+          id="cart"
+          class="product-container d-flex direction-column gap wrap"
+        ></div>
+        <div
+          class="final-price d-flex direction-column gap shadow padding-all-16"
+        >
+          <span>Price Details</span>
+          <div class="d-flex space-between gap">
+            <span>Price of <span id="count"></span> Items</span>
+            <span id="totalPrice">Rs.</span>
+          </div>
+          <div class="d-flex space-between gap">
+            <span>Discount</span>
+            <span id="discountPrice">Rs.</span>
+          </div>
+          <div class="d-flex space-between gap">
+            <span>Delivery Charges</span>
+            <span>Rs.150</span>
+          </div>
+          <div class="d-flex space-between gap">
+            <span>Total Price</span>
+            <span id="price">Rs.4150</span>
+          </div>
+          <button class="button cursor btn-primary">Checkout Cart</button>
+        </div>
+      </main>
+    </main>
     <script type="module" src="./cart.js"></script>
   </body>
 </html>

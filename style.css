@@ -52,6 +52,11 @@
   font-size: 2rem;
  
 }
+@media screen and (max-width:768px){
+  .link{
+    font-size: 2rem;
+  }
+}
 
 .products-page {
   padding: 8rem 3rem 2rem 3rem;
@@ -111,9 +116,9 @@
   position: fixed;
 }
 
-.product-container {
-  padding: 6rem 4rem 3rem;
-
+.main{
+  padding:  0rem 5rem;
+  margin: 2rem;
 }
 
 .heading-3 {
@@ -131,4 +136,16 @@
 .radio {
   width: 1.25rem;
   height: 1.25rem;
+}
+.main-main{
+  margin: 5rem;
+}
+.main-main h1{
+  margin: auto;
+  color: var(--primary-color);
+}
+
+.main-container{
+  margin-top: 5rem;
+  width: 100%;
 }
